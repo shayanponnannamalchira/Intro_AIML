@@ -1,3 +1,5 @@
+#traversing a tree using BFS
+#Queue data structure is used to implement BFS
 class Node:
     def __init__(self, value):   # Corrected here
         self.value = value
