@@ -1,6 +1,6 @@
 #Depth First Search (DFS) implementation in Python
 class Node:
-    def _init_(self, value):
+    def __init__(self, value):
         self.value = value
         self.child = []
 def dfs(root, target):
