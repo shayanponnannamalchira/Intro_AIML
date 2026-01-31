@@ -1,43 +1,39 @@
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.children = []      # List of child nodes
+
 from collections import deque
 
-def is_goal(state, target):
-    return state[0] == target or state[1] == target
-
-def water_jug_bfs(x, y, target):
-    visited = set()
-    queue = deque()
-
-    start_state = (0, 0)
-    queue.append((start_state, [start_state])) 
+def bfs(root):
+    if not root:
+        return
+    
+    queue = deque([root])      # Initialize queue with root
 
     while queue:
-        (jug_x, jug_y), path = queue.popleft()
-        
-        if (jug_x, jug_y) in visited:
-            continue
-            
-        visited.add((jug_x, jug_y))
+        current_node = queue.popleft()
+        print(current_node.value, end=" ")
 
-        if is_goal((jug_x, jug_y), target):
-            for step in path:
-                print(f"Step: X={step[0]}, Y={step[1]}")
-            return path
-            
-        next_states = [
-            (x, jug_y), 
-            (jug_x, y), 
-            (0, jug_y), 
-            (jug_x, 0), 
-            (jug_x - min(jug_x, y - jug_y), jug_y + min(jug_x, y - jug_y)),
-            (jug_x + min(jug_y, x - jug_x), jug_y - min(jug_y, x - jug_x))
-        ]
+        # Enqueue all children of current node
+        for child in current_node.children:
+            queue.append(child)
 
-        for state in next_states:
-            if state not in visited:
-                queue.append((state, path + [state]))
 
-    return None
+# Create Nodes
+A = Node("(0,0)")
+B = Node("(0,3)")
+C = Node("(3,0)")
+D = Node("(3,3)")
+E = Node("(4,2)")
+F = Node("(0,2)")
+G = Node("(2,0)")
 
-solution_path = water_jug_bfs(4, 3, 2)
-if not solution_path:
-    print("No solution found.")
+# Build the tree
+A.children = [B, C, D]
+B.children = [E]
+C.children = [F]
+D.children = [G]
+
+print("BFS Traversal of the Tree:")
+bfs(A)

@@ -1,55 +1,47 @@
-from collections import deque
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.children = []
 
-def is_goal(state, target):
-    return state[0] == target or state[1] == target
+# DFS using stack
+def dfs_stack(root):
+    if not root:
+        return
 
-def water_jug_dfs(x, y, target):
-    stack = []
+    stack = [root]
     visited = set()
 
-    start_state = (0, 0)
-    stack.append((start_state, [start_state])) 
-
     while stack:
-        (jug_x, jug_y), path = stack.pop()
-        
-        current_state = (jug_x, jug_y)
-        
-        if current_state in visited:
+        current = stack.pop()
+
+        if current in visited:
             continue
-            
-        visited.add(current_state)
 
-        if is_goal(current_state, target):
-            print("Solution Path Found (DFS):")
-            for step in path:
-                print(f"Step: X={step[0]}, Y={step[1]}")
-            return path
-            
-        fill_x = (x, jug_y)
-        fill_y = (jug_x, y)
-        empty_x = (0, jug_y)
-        empty_y = (jug_x, 0)
-        
-        pour_x_to_y = (
-            jug_x - min(jug_x, y - jug_y), 
-            jug_y + min(jug_x, y - jug_y)
-        )
-        
-        pour_y_to_x = (
-            jug_x + min(jug_y, x - jug_x), 
-            jug_y - min(jug_y, x - jug_x)
-        )
-        
-        next_states = [fill_x, fill_y, empty_x, empty_y, pour_x_to_y, pour_y_to_x]
+        visited.add(current)
+        print(current.value, end=" ")
 
-        for state in next_states:
-            if state not in visited:
-                stack.append((state, path + [state]))
+        # Push children in reverse so leftmost child prints first
+        for child in reversed(current.children):
+            stack.append(child)
 
-    return None
 
-solution_path_dfs = water_jug_dfs(4, 3, 2)
+# Create Nodes
+A = Node("(0,0)")
+B = Node("(0,3)")
+C = Node("(3,0)")
+D = Node("(3,3)")
+E = Node("(4,2)")
+F = Node("(0,2)")
+G = Node("(2,0)")
 
-if not solution_path_dfs:
-    print("\nNo solution found for the given capacities and target.")
+
+# Build the tree
+A.children = [B]
+B.children = [C]
+C.children = [D]
+D.children = [E]
+E.children = [F]
+F.children = [G]
+
+print("DFS Traversal of the Tree:")
+dfs_stack(A)
